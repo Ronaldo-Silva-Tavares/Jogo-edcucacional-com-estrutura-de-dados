@@ -1,0 +1,277 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAXTAM 12
+int i;
+
+// Cria um agregado do tipo TPilha que reúne um vetor Item com tamanho máximo "MAXTAM" e uma variável topo que guarda a posição do topo da pilha do tipo TPilha
+
+typedef struct {
+	int Item[MAXTAM];
+	int Topo;
+} TPilha;
+
+// Cria uma pilha vazia p do tipo TPilha
+
+void TPilha_Inicia (TPilha* p) { 
+	p -> Topo = -1;
+}
+
+
+//Função que verifica se uma pilha está vazia
+
+int TPilha_Vazia (TPilha* p) {
+	if (p -> Topo == -1){
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+
+//Função que verifica se uma pilha está cheia
+
+int TPilha_Cheia (TPilha* p) {
+	if(p->Topo == MAXTAM - 1) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+
+//Procedimento que insere um elemento inteiro x no topo de uma pilha. Se a pilha está cheia, ele avisa através da mensagem "Pilha cheia" 
+
+void TPilha_Insere (TPilha* p, int x) {
+	if(TPilha_Cheia(p) == 1){
+		printf("Erro: Pilha Cheia");
+	} else {
+		p->Topo++;
+		p-> Item[p->Topo] = x;	
+	}
+
+}
+
+//Procedimento que retira um elemento do topo de uma pilha. Se a pilha está vazia, ele avisa através da mensagem de erro "Pilha vazia"  
+
+int TPilha_Retira (TPilha* p) {
+	int aux;
+	if(TPilha_Vazia(p) == 1){
+		printf("Erro: Pilha Vazia");
+	} else {
+		aux = p-> Item[p->Topo];
+		p->Topo--;
+		return aux;	
+	}
+}
+
+
+
+
+int main () {
+	
+
+// "op" é variável inteira que recebe uma das opções do menu principal: 0(sair). 1(empilhar), 2(Desempilhar) e 3(Imprimir)
+
+// "op1" é variável de caractere que recebe uma das subopções: a, b, c, d, e ou f
+
+ 
+	int op, valor, valor1;
+	char op1;
+
+
+// Cria as pilhas p, p1 e p2 reservando os espaços de memória com tamanho máximo MAXTAM das pilhas a serem criadas. 
+
+	
+	TPilha* p = (TPilha*)malloc(sizeof(TPilha));
+	TPilha_Inicia(p);
+	
+	TPilha* p1 = (TPilha*)malloc(sizeof(TPilha));
+	TPilha_Inicia(p1);
+
+	TPilha* p2 = (TPilha*)malloc(sizeof(TPilha));
+	TPilha_Inicia(p2);
+
+//Pilhas de exemplo
+
+TPilha_Insere(p, 9);
+TPilha_Insere(p, 2);
+TPilha_Insere(p, 4);
+TPilha_Insere(p, 7);
+TPilha_Insere(p, 1);
+TPilha_Insere(p, 8);
+TPilha_Insere(p, 5);
+TPilha_Insere(p, 3);
+TPilha_Insere(p, 6);
+
+TPilha_Insere(p1, 5);
+TPilha_Insere(p1, 8);
+TPilha_Insere(p1, 1);
+TPilha_Insere(p1, 3);
+TPilha_Insere(p1, 6);
+TPilha_Insere(p1, 9);
+TPilha_Insere(p1, 2);
+TPilha_Insere(p1, 4);
+TPilha_Insere(p1, 7);
+
+TPilha_Insere(p2, 9);
+TPilha_Insere(p2, 5);
+TPilha_Insere(p2, 7);
+TPilha_Insere(p2, 4);
+TPilha_Insere(p2, 1);
+TPilha_Insere(p2, 6);
+TPilha_Insere(p2, 3);
+TPilha_Insere(p2, 8);
+TPilha_Insere(p2, 2);
+
+// Do while para escolher uma das quatro opções do menu principal (0, 1, 2 ou 3).
+	
+	do{
+
+	printf("\n 0 - Sair \n 1 - Empilhar \n 2 - Desempilhar \n 3 - Imprimir \n" );
+	scanf("%d", &op);
+
+	switch(op){
+	case 0:
+		printf("saindo do programa...");
+		break;
+	case 1:
+ 		printf("Valor a ser empilhado em A:");
+		scanf("%d", &valor);
+		TPilha_Insere(p, valor);
+		printf("Valor a ser empilhado em B:");
+		scanf("%d", &valor1);
+		TPilha_Insere(p1, valor1);
+		break;
+	case 2:
+
+//Do while dentro da opção 2 para escolha de qual pilha de origem será desempilhada o elemento do topo que automaticamente será empilhado no topo de outra pilha de destino. 
+
+	    do{
+    	printf("\n 'a' - Desempilha da pilha A e empilha na pilha B \n 'b' - Desempilha da pilha A e empilha na pilha C \n 'c' - Desempilha da pilha B e empilha na pilha A \n 'd' - Desempilha da pilha B e empilha na pilha C \n 'e' - Desempilha da pilha C e empilha na pilha A \n 'f' - Desempilha da pilha C e empilha na pilha B \n" );
+	    scanf("%c", &op1);
+
+	    switch(op1){
+	    case 'a':
+		    if(TPilha_Vazia(p) == 1){
+			    printf("\t %d\n", TPilha_Retira(p));
+	    		    } else {
+	    		int aux = TPilha_Retira(p);
+	    		TPilha_Insere(p1, aux);
+	    		printf("Desempilha da pilha A e empilha na pilha B: %d \n", p1 -> Item[p1 -> Topo]);
+	    		}
+		    if ((p1 -> Topo >= 2) && (p1 -> Item[p1 -> Topo] == p1 -> Item[p1 -> Topo - 1]) && (p1 -> Item[p1 -> Topo] == p1 -> Item[p1 -> Topo - 2])){
+			    for (i = 1; i <= 3; i++){
+				    printf("Parabéns!!! Você formou o triângulo equilátero de lados congruentes a:  %d \n", TPilha_Retira(p1));
+		        }
+		     }
+		    break;
+	    case 'b':
+		    if(TPilha_Vazia(p) == 1){
+			    printf("\t %d\n", TPilha_Retira(p));
+	    		    } else {
+	    		int aux = TPilha_Retira(p);
+	    		TPilha_Insere(p2, aux);
+	    		printf("Desempilha da pilha A e empilha na pilha C: %d \n", p2 -> Item[p2 -> Topo]);
+		    }
+		    if ((p2 -> Topo >= 2) && p2 -> Item[p2 -> Topo] == p2 -> Item[p2 -> Topo - 1] && p2 -> Item[p2 -> Topo - 1] == p2 -> Item[p2 -> Topo - 2]){
+			    for (i = 1; i <= 3; i++){
+				    printf("Parabéns!!! Você formou o triângulo equilátero de lados congruentes a:  %d \n", TPilha_Retira(p2));
+		        }
+		     }
+		    break;
+	    case 'c':
+		    if(TPilha_Vazia(p1) == 1){
+			    printf("\t %d\n", TPilha_Retira(p1));
+	    		    } else {
+	    		int aux = TPilha_Retira(p1);
+	    		TPilha_Insere(p, aux);
+	    		printf("Desempilha da pilha B e empilha na pilha A: %d \n", p -> Item[p -> Topo]);
+		    }
+		    if ((p -> Topo >= 2) && p -> Item[p -> Topo] == p -> Item[p -> Topo - 1] && p -> Item[p -> Topo - 1] == p -> Item[p -> Topo - 2]){
+			    for (i = 1; i <= 3; i++){
+				    printf("Parabéns!!! Você formou o triângulo equilátero de lados congruentes a:  %d \n", TPilha_Retira(p));
+		        }
+		     }
+		    break;
+	    case 'd':
+		    if(TPilha_Vazia(p1) == 1){
+			    printf("\t %d\n", TPilha_Retira(p1));
+	    		    } else {
+	    		int aux = TPilha_Retira(p1);
+	    		TPilha_Insere(p2, aux);
+	    		printf("Desempilha da pilha B e empilha na pilha C: %d \n", p2 -> Item[p2 -> Topo]);
+		    }
+		    if ((p2 -> Topo >= 2) && p2 -> Item[p2 -> Topo] == p2 -> Item[p2 -> Topo - 1] && p2 -> Item[p2 -> Topo - 1] == p2 -> Item[p2 -> Topo - 2]){
+			    for (i = 1; i <= 3; i++){
+				    printf("Parabéns!!! Você formou o triângulo equilátero de lados congruentes a:  %d \n", TPilha_Retira(p2));
+		        }
+		     }
+		    break;
+	    case 'e':
+		    if(TPilha_Vazia(p2) == 1){
+			    printf("\t %d\n", TPilha_Retira(p2));
+	    		    } else {
+	    		int aux = TPilha_Retira(p2);
+	    		TPilha_Insere(p, aux);
+	    		printf("Desempilha da pilha C e empilha na pilha A: %d \n", p -> Item[p -> Topo]);
+		    }
+		    if ((p -> Topo >= 2) && p -> Item[p -> Topo] == p -> Item[p -> Topo - 1] && p -> Item[p -> Topo - 1] == p -> Item[p -> Topo - 2]){
+			    for (i = 1; i <= 3; i++){
+				    printf("Parabéns!!! Você formou o triângulo equilátero de lados congruentes a:  %d \n", TPilha_Retira(p));
+		        }
+		     }
+		    break;
+	    case 'f':
+		    if(TPilha_Vazia(p2) == 1){
+			    printf("\t %d\n", TPilha_Retira(p2));
+	    		    } else {
+	    		int aux = TPilha_Retira(p2);
+	    		TPilha_Insere(p1, aux);
+	    		printf("Desempilha da pilha C e empilha na pilha B: %d \n", p1 -> Item[p1 -> Topo]);
+		    }
+		    if ((p1 -> Topo >= 2) && p1 -> Item[p1 -> Topo] == p1 -> Item[p1 -> Topo - 1] && p1 -> Item[p1 -> Topo - 1] == p1 -> Item[p1 -> Topo - 2]){
+			    for (i = 1; i <= 3; i++){
+				    printf("Parabéns!!! Você formou o triângulo equilátero de lados congruentes a:  %d \n", TPilha_Retira(p1));
+		        }
+		     }
+		    break;
+		default:
+		      printf("Opcao errada!\n");
+	    }
+	    }while(op1 != 'a' && op1 != 'b' && op1 != 'c' && op1 != 'd' && op1 != 'e' && op1 != 'f');
+		break;
+	case 3: 
+		printf("\n Linha \t Pilha A \t Pilha B \t Pilha C\n");	
+		    if(TPilha_Vazia(p) && TPilha_Vazia(p1) && TPilha_Vazia(p2) == 1){
+		        printf("\t \t Pilhas Vazias");
+		printf("\n -------------------- Pilhas --------------------\n");
+		        break;
+	        } else {
+	           if (p -> Topo >= p1 -> Topo && p -> Topo >= p2 -> Topo){
+	           for (i = p -> Topo; i >= 0; i--) {
+                printf(" %d \t %d \t \t %d \t \t %d \n", i + 1, p -> Item[i], p1 -> Item[i], p2 -> Item[i]);
+	            } 
+	            } else {
+	                if (p1 -> Topo >= p -> Topo && p1 -> Topo >= p2 -> Topo){
+	                for (i = p1 -> Topo; i >= 0; i--) {
+                    printf(" %d \t %d \t \t %d \t \t %d \n", i + 1, p -> Item[i], p1 -> Item[i], p2 -> Item[i]);
+	                }
+	                } else {
+	                    if (p2 -> Topo >= p -> Topo && p2 -> Topo >= p1 -> Topo){
+	                    for (i = p2 -> Topo; i >= 0; i--) {
+                        printf(" %d \t %d \t \t %d \t \t %d \n", i + 1, p -> Item[i], p1 -> Item[i], p2 -> Item[i]);
+	                    }
+	                    }
+	                 }
+	                }
+	        }
+		printf("\n -------------------- Pilha --------------------\n");
+		break;
+	default:
+		printf("Opcao invalida!\n");	
+	}
+	}while(op != 0);
+	
+return 0;
+
+}
